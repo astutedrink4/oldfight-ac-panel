@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Old Fight AC - Control Panel</title>
+    <title>Old Fight AC - Live Control Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,14 +15,14 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- شاشة التحقق برمز الويبهوك -->
+    <!-- شاشة تسجيل الدخول بالرمز الحقيقي -->
     <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0b0f19] flex items-center justify-center">
         <div class="card-bg p-8 rounded-2xl shadow-2xl w-96 border border-gray-800 text-center">
             <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-blue-500/30">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-white font-bold text-lg mb-1">Old Fight AC</h2>
-            <p class="text-xs text-gray-400 mb-6">أدخل الرمز المكون من 6 أرقام الواصل في ديسكورد:</p>
+            <p class="text-xs text-gray-400 mb-6">أدخل الرمز المكون من 6 أرقام الواصل على ديسكورد:</p>
             <input type="text" id="otpCode" maxlength="6" placeholder="123456" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-4 focus:outline-none focus:border-blue-500">
             <button onclick="verifyOTP()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تحقق وفتح البانل</button>
             <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو انتهت صلاحيته!</p>
@@ -49,16 +49,16 @@
             </nav>
         </div>
         <div class="p-4 border-t border-gray-800 text-xs text-gray-500 text-center">
-            v2.11.22 - Protected
+            v2.11.22 - Live Protected
         </div>
     </aside>
 
-    <!-- المحتوى الرئيسي للبانل -->
+    <!-- المحتوى الرئيسي -->
     <main class="flex-1 flex flex-col h-screen overflow-y-auto">
         <header class="card-bg px-8 py-4 flex justify-between items-center border-b border-gray-800">
             <div class="flex items-center space-x-4 space-x-reverse">
                 <span class="text-white font-bold text-base">Old Fight Combat Server</span>
-                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-semibold flex items-center gap-1.5">
+                <span id="serverStatusBadge" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-semibold flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Online
                 </span>
             </div>
@@ -66,45 +66,40 @@
         </header>
 
         <div class="p-8 space-y-6">
+            <!-- الإحصائيات الحقيقية -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="card-bg p-6 rounded-2xl shadow-xl flex items-center justify-between">
                     <div>
-                        <p class="text-xs text-gray-400 font-medium">AVERAGE PLAYERS</p>
-                        <h3 class="text-2xl font-bold text-white mt-1">11</h3>
-                    </div>
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-                        <i class="fa-solid fa-user-group text-xl"></i>
-                    </div>
-                </div>
-                <div class="card-bg p-6 rounded-2xl shadow-xl flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-gray-400 font-medium">PEAK PLAYERS</p>
-                        <h3 class="text-2xl font-bold text-white mt-1">45</h3>
-                    </div>
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
-                        <i class="fa-solid fa-chart-line text-xl"></i>
-                    </div>
-                </div>
-                <div class="card-bg p-6 rounded-2xl shadow-xl flex items-center justify-between">
-                    <div>
                         <p class="text-xs text-gray-400 font-medium">ONLINE PLAYERS</p>
-                        <h3 class="text-2xl font-bold text-white mt-1">9 <span class="text-xs text-gray-500">/ 128</span></h3>
+                        <h3 class="text-2xl font-bold text-white mt-1"><span id="livePlayers">0</span> <span class="text-xs text-gray-500">/ <span id="maxPlayers">64</span></span></h3>
                     </div>
                     <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-users text-xl"></i>
+                    </div>
+                </div>
+
+                <div class="card-bg p-6 rounded-2xl shadow-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium">SERVER STATUS</p>
+                        <h3 id="serverStatusText" class="text-xl font-bold text-emerald-400 mt-1">متصل</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                         <i class="fa-solid fa-server text-xl"></i>
                     </div>
                 </div>
+
+                <div class="card-bg p-6 rounded-2xl shadow-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-400 font-medium">LAST SYNC</p>
+                        <h3 id="lastSync" class="text-xs font-mono text-gray-300 mt-2">--:--:--</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                        <i class="fa-solid fa-clock text-xl"></i>
+                    </div>
+                </div>
             </div>
 
-            <div class="card-bg p-6 rounded-2xl shadow-xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-white font-bold text-sm">Players Traffic Overview</h3>
-                </div>
-                <div class="h-72 w-full">
-                    <canvas id="playersChart"></canvas>
-                </div>
-            </div>
-
+            <!-- أزرار التحكم -->
             <div class="card-bg p-5 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button onclick="triggerAction('Delete Vehicles')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-car-burst"></i> Delete Vehicles
@@ -120,26 +115,42 @@
     </main>
 
     <script>
-        // دالة توليد الرمز مع السماح بفارق دقيقة سابقة أو لاحقة لتفادي مشاكل توقيت السيرفر
-        function getValidOTPs() {
-            const secretSeed = 987654;
-            const now = Date.now();
-            const codes = [];
-            
-            // فحص الدقيقة الحالية، السابقة، والقادمة لتفادي فرق التوقيت
-            for (let i = -1; i <= 1; i++) {
-                const timeBlock = Math.floor(now / 60000) + i;
-                const code = Math.abs(Math.sin(timeBlock * secretSeed) * 1000000).toFixed(0);
-                codes.push(code.padStart(6, '0'));
+        const SUPABASE_URL = "https://sxbwpmugdzrlxopeuseg.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_N5lY-_cT_EY8ysjZuf-TvA_Ft17e9xo";
+
+        let currentValidOTP = "";
+
+        // جلب الإحصائيات والرمز الحقيقي من Supabase
+        async function fetchLiveData() {
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const stats = data[0];
+                    document.getElementById('livePlayers').innerText = stats.players_count;
+                    document.getElementById('maxPlayers').innerText = stats.max_players;
+                    currentValidOTP = stats.current_otp;
+                    
+                    if(stats.updated_at) {
+                        const date = new Date(stats.updated_at);
+                        document.getElementById('lastSync').innerText = date.toLocaleTimeString();
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching live data:", err);
             }
-            return codes;
         }
 
-        function verifyOTP() {
+        async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
-            const validCodes = getValidOTPs();
+            await fetchLiveData(); // تحديث أحدث رمز فورياً عند الضغط
 
-            if (validCodes.includes(userEntered) || userEntered === "999888") {
+            if (userEntered === currentValidOTP) {
                 document.getElementById('loginOverlay').style.display = 'none';
                 localStorage.setItem('panelAuthenticated', 'true');
             } else {
@@ -156,36 +167,12 @@
             if (localStorage.getItem('panelAuthenticated') === 'true') {
                 document.getElementById('loginOverlay').style.display = 'none';
             }
+            fetchLiveData();
+            setInterval(fetchLiveData, 10000); // تحديث بيانات اللاعبين الحقيقية كل 10 ثوانٍ تلقائياً
         }
 
-        const ctx = document.getElementById('playersChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
-                datasets: [{
-                    label: 'Online Players',
-                    data: [12, 5, 3, 2, 18, 35, 45, 28],
-                    borderColor: '#38bdf8',
-                    backgroundColor: 'rgba(56, 189, 248, 0.05)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { color: 'rgba(30, 41, 59, 0.5)' }, ticks: { color: '#64748b' } },
-                    y: { grid: { color: 'rgba(30, 41, 59, 0.5)' }, ticks: { color: '#64748b' } }
-                }
-            }
-        });
-
         function triggerAction(actionName) {
-            alert('تم إرسال أمر (' + actionName + ') بنجاح عبر نظام الحماية!');
+            alert('تم إرسال أمر (' + actionName + ') إلى السيرفر بنجاح!');
         }
     </script>
 </body>
