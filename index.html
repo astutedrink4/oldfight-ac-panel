@@ -229,8 +229,7 @@
             });
         }
 
-        // دالة التحقق السريعة بدون تعليق
-        async function verifyOTP() {
+      async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
             const errorElem = document.getElementById('errorMsg');
             const btn = document.getElementById('verifyBtn');
@@ -265,11 +264,11 @@
                         errorElem.classList.remove('hidden');
                     }
                 } else {
-                    errorElem.innerText = "فشل جلب الرمز من القاعدة!";
+                    errorElem.innerText = "فشل قراءة الرمز من القاعدة!";
                     errorElem.classList.remove('hidden');
                 }
             } catch (err) {
-                errorElem.innerText = "خطأ بالاتصال!";
+                errorElem.innerText = "خطأ بالاتصال بقاعدة البيانات!";
                 errorElem.classList.remove('hidden');
             }
             
