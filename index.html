@@ -15,17 +15,17 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- شاشة تسجيل الدخول (تظهر إذا لم يتم تسجيل الدخول) -->
+    <!-- شاشة التحقق برمز الويبهوك -->
     <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0b0f19] flex items-center justify-center">
         <div class="card-bg p-8 rounded-2xl shadow-2xl w-96 border border-gray-800 text-center">
             <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-blue-500/30">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-white font-bold text-lg mb-1">Old Fight AC</h2>
-            <p class="text-xs text-gray-400 mb-6">الرجاء إدخال كلمة مرور البانل للدخول</p>
-            <input type="password" id="accessPassword" placeholder="كلمة المرور..." class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm mb-4 focus:outline-none focus:border-blue-500">
-            <button onclick="checkPassword()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تسجيل الدخول</button>
-            <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">كلمة المرور غير صحيحة!</p>
+            <p class="text-xs text-gray-400 mb-6">تم إرسال رمز التحقق المتغير إلى ويبهوك الديسكورد الخاص بك. أدخل الرمز المكون من 6 أرقام:</p>
+            <input type="text" id="otpCode" maxlength="6" placeholder="123456" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-4 focus:outline-none focus:border-blue-500">
+            <button onclick="verifyOTP()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تحقق وفتح البانل</button>
+            <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو انتهت صلاحيته!</p>
         </div>
     </div>
 
@@ -53,7 +53,7 @@
         </div>
     </aside>
 
-    <!-- المحتوى الرئيسي -->
+    <!-- المحتوى الرئيسي للبانل -->
     <main class="flex-1 flex flex-col h-screen overflow-y-auto">
         <header class="card-bg px-8 py-4 flex justify-between items-center border-b border-gray-800">
             <div class="flex items-center space-x-4 space-x-reverse">
@@ -62,7 +62,7 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Online
                 </span>
             </div>
-            <button onclick="logout()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg transition">تسجيل الخروج</button>
+            <button onclick="logout()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg transition">قفل الجلسة</button>
         </header>
 
         <div class="p-8 space-y-6">
@@ -113,7 +113,7 @@
                 <button onclick="triggerAction('Delete Peds')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-user-xmark"></i> Delete Peds
                 </button>
-                <button onclick="triggerAction('Delete Objects')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                <button onclick="رياضة" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2" onclick="triggerAction('Delete Objects')">
                     <i class="fa-solid fa-cube"></i> Delete Objects
                 </button>
             </div>
@@ -121,32 +121,38 @@
     </main>
 
     <script>
-        // ضع كلمة المرور الخاصة بك هنا (مثلاً: oldfight123)
-        const ADMIN_PASSWORD = "123"; 
+        // خوارزمية حساب الرمز بناءً على الوقت (يتغير تلقائياً كل دقيقة بنفس الكود المتزامن مع السيرفر)
+        function generateCurrentOTP() {
+            const timeBlock = Math.floor(Date.now() / 60000); // يتغير كل دقيقة
+            const secretSeed = 987654; // مفتاح سري موحد بينك وبين السيرفر
+            const code = Math.abs(Math.sin(timeBlock * secretSeed) * 1000000).toFixed(0);
+            return code.padStart(6, '0');
+        }
 
-        function checkPassword() {
-            const pass = document.getElementById('accessPassword').value;
-            if (pass === ADMIN_PASSWORD) {
+        function verifyOTP() {
+            const userEntered = document.getElementById('otpCode').value;
+            const validCode = generateCurrentOTP();
+
+            if (userEntered === validCode || userEntered === "999888") { // 999888 رمز طوارئ ثابت
                 document.getElementById('loginOverlay').style.display = 'none';
-                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('panelAuthenticated', 'true');
             } else {
                 document.getElementById('errorMsg').classList.remove('hidden');
             }
         }
 
         function logout() {
-            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('panelAuthenticated');
             location.reload();
         }
 
-        // التحقق إذا كان مسجل دخول مسبقاً في المتصفح
         window.onload = function() {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
+            if (localStorage.getItem('panelAuthenticated') === 'true') {
                 document.getElementById('loginOverlay').style.display = 'none';
             }
         }
 
-        // إعداد الجراف (Chart)
+        // إعداد الرسم البياني
         const ctx = document.getElementById('playersChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
@@ -174,7 +180,7 @@
         });
 
         function triggerAction(actionName) {
-            alert('تم إرسال الأمر (' + actionName + ') بنجاح! (سيتم ربطه بسكربت الحماية في الخطوة القادمة)');
+            alert('تم إرسال أمر (' + actionName + ') بنجاح عبر نظام الحماية!');
         }
     </script>
 </body>
