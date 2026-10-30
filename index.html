@@ -26,7 +26,7 @@
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-white font-bold text-lg mb-1">نظام حماية أولد فايت</h2>
-            <p class="text-xs text-gray-400 mb-6">أدخل رمز الدخول السري الواصل على ديسكورد:</p>
+            <p class="text-xs text-gray-400 mb-6">أدخل رمز الدخول السري (افتراضي: 123456):</p>
             <input type="text" id="otpCode" maxlength="6" placeholder="------" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-4 focus:outline-none focus:border-blue-500">
             <button onclick="verifyOTP()" id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تسجيل الدخول</button>
             <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو منتهي الصلاحية!</p>
@@ -46,6 +46,7 @@
                 </div>
             </div>
 
+            <!-- بحث عام -->
             <div class="px-4 mb-4">
                 <div class="relative">
                     <i class="fa-solid fa-search absolute right-3 top-2.5 text-xs text-gray-500"></i>
@@ -63,6 +64,7 @@
                     <span>التحليلات والكرة الأرضية</span>
                 </button>
 
+                <!-- قسم الإشراف (Moderation) -->
                 <div class="pt-3 pb-1">
                     <div class="flex items-center justify-between px-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-shield-cat text-blue-500"></i> الإشراف والحماية</span>
@@ -103,6 +105,7 @@
                     </div>
                 </div>
 
+                <!-- إعدادات الحماية المتقدمة من الموقع -->
                 <div class="pt-3 pb-1">
                     <button onclick="switchTab('settings')" id="nav-settings" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
                         <i class="fa-solid fa-sliders w-4 text-center"></i>
@@ -113,7 +116,7 @@
         </div>
 
         <div class="p-3 border-t border-gray-900 text-[10px] text-gray-500 flex justify-between items-center px-4">
-            <span>السيرفر: متصل</span>
+            <span>Server: Online</span>
             <span>v2.11.22</span>
         </div>
     </aside>
@@ -123,14 +126,14 @@
         <header class="card-bg px-8 py-3 flex justify-between items-center border-b border-gray-800 sticky top-0 z-10">
             <div class="flex items-center space-x-4 space-x-reverse">
                 <span class="text-white font-bold text-sm">سيرفر أولد فايت - اللوحة الرئيسية</span>
-                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2.5 py-0.5 rounded-full font-medium">حماية نشطة</span>
+                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2.5 py-0.5 rounded-full font-medium">متصل وآمن</span>
             </div>
             <button onclick="logout()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg transition">إغلاق الجلسة</button>
         </header>
 
         <div class="p-6 space-y-6">
 
-            <!-- 1. الرئيسية -->
+            <!-- 1. لوحة التحكم (Dashboard) -->
             <div id="tab-dashboard" class="space-y-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="card-bg p-4 rounded-xl flex flex-col justify-between">
@@ -173,19 +176,20 @@
                     </div>
                 </div>
 
+                <!-- أزرار الإدارة السريعة -->
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">التحذيرات</span><span class="text-sm font-bold text-amber-400">0</span></div><div class="h-20"><canvas id="warnsChart"></canvas></div></div>
                     <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">حالات الطرد (Kicks)</span><span class="text-sm font-bold text-blue-400">0</span></div><div class="h-20"><canvas id="kicksChart"></canvas></div></div>
-                    <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">الباندات النشطة</span><span class="text-sm font-bold text-red-500">0</span></div><div class="h-20"><canvas id="bansChart"></canvas></div></div>
+                    <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">الباندات النشطة</span><span class="text-sm font-bold text-red-500" id="banCountLabel">0</span></div><div class="h-20"><canvas id="bansChart"></canvas></div></div>
                     <div class="space-y-2 flex flex-col justify-between">
                         <button onclick="triggerAction('تنظيف المركبات')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-car text-blue-400"></i> تنظيف المركبات</button>
-                        <button onclick="triggerAction('تنظيف الشخصيات')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-user text-blue-400"></i> تنظيف الشخصيات</button>
+                        <button onclick="triggerAction('تنظيف الـ Peds')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-user text-blue-400"></i> تنظيف الشخصيات</button>
                         <button onclick="triggerAction('تنظيف المجسمات')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-cube text-blue-400"></i> تنظيف المجسمات</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. التحليلات والكرة الأرضية -->
+            <!-- بقية الأقسام -->
             <div id="tab-analytics" class="card-bg p-6 rounded-xl hidden space-y-4">
                 <h3 class="text-white font-bold text-sm mb-2"><i class="fa-solid fa-globe text-blue-500 ml-2"></i> خريطة توزع اللاعبين حول العالم</h3>
                 <div class="h-[450px] w-full bg-black/40 rounded-xl border border-gray-800 flex flex-col items-center justify-center relative overflow-hidden">
@@ -198,7 +202,6 @@
                 </div>
             </div>
 
-            <!-- 3. خريطة قراند 3D -->
             <div id="tab-map" class="card-bg p-6 rounded-xl hidden space-y-4">
                 <div class="flex justify-between items-center">
                     <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-map-location-dot text-emerald-500 ml-2"></i> خريطة لوس سانتوس (GTA V Ingame 3D Map)</h3>
@@ -206,53 +209,26 @@
                 </div>
                 <div class="h-[500px] w-full bg-gray-950 rounded-xl border border-gray-800 relative overflow-hidden flex items-center justify-center">
                     <div class="absolute inset-0 bg-cover bg-center opacity-70" style="background-image: url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1200&auto=format&fit=crop');"></div>
-                    <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur p-4 rounded-xl border border-gray-700 text-xs space-y-2 z-10">
-                        <div class="text-white font-bold mb-1">دليل الخريطة:</div>
-                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> لاعب متصل</div>
-                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> لاعب خامل (AFK)</div>
-                    </div>
                 </div>
             </div>
 
-            <!-- 4. بحث الحسابات (Discord & Steam Lookup) -->
             <div id="tab-lookup" class="card-bg p-6 rounded-xl hidden space-y-4">
-                <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-magnifying-glass text-blue-400 ml-2"></i> فحص حسابات اللاعب (Discord & Steam Lookup)</h3>
+                <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-magnifying-glass text-blue-400 ml-2"></i> فحص حسابات اللاعب</h3>
                 <div class="flex gap-3">
-                    <input type="text" id="lookupInput" placeholder="أدخل آيدي اللاعب أو اسم ديسكورد للبحث..." class="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
+                    <input type="text" id="lookupInput" placeholder="أدخل آيدي اللاعب..." class="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
                     <button onclick="performLookup()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-6 py-2.5 rounded-xl transition">بحث شامل</button>
                 </div>
-                <div id="lookupResult" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                    <div class="card-bg p-4 rounded-xl border border-gray-800">
-                        <span class="text-xs text-gray-400 block mb-1">حساب ديسكورد (Discord)</span>
-                        <p class="text-white text-xs font-semibold">جاهز للبحث...</p>
-                    </div>
-                    <div class="card-bg p-4 rounded-xl border border-gray-800">
-                        <span class="text-xs text-gray-400 block mb-1">حساب ستيم (Steam)</span>
-                        <p class="text-white text-xs font-semibold">غير محدد</p>
-                    </div>
-                    <div class="card-bg p-4 rounded-xl border border-gray-800">
-                        <span class="text-xs text-gray-400 block mb-1">سجل الباندات</span>
-                        <p class="text-emerald-400 text-xs font-semibold">لا توجد مخالفات</p>
-                    </div>
-                </div>
             </div>
 
-            <!-- 5. تسجيل الجلسات (Session Replay) -->
             <div id="tab-replay" class="card-bg p-6 rounded-xl hidden space-y-4">
-                <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-video text-purple-400 ml-2"></i> سجل الجلسات الكامل (Session Replay)</h3>
-                <p class="text-xs text-gray-400">إعادة تشغيل كامل جلسة اللاعب منذ لحظة دخوله للسيرفر وحتى خروجه.</p>
-                <div class="card-bg p-12 rounded-xl text-center border border-gray-800">
-                    <i class="fa-solid fa-film text-4xl text-purple-500 mb-3"></i>
-                    <h4 class="text-white font-bold text-sm">اختر لاعباً لعرض إعادة الجلسة</h4>
-                </div>
+                <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-video text-purple-400 ml-2"></i> سجل الجلسات بالكامل</h3>
             </div>
 
-            <!-- 6. مراقبة الشاشات -->
             <div id="tab-monitor" class="card-bg p-6 rounded-xl hidden space-y-4">
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <div class="lg:col-span-3 card-bg p-8 rounded-xl flex flex-col items-center justify-center min-h-[400px]">
                         <i class="fa-solid fa-desktop text-5xl text-gray-700 mb-3"></i>
-                        <h4 class="text-white font-bold text-sm">اختر لاعباً من القائمة الجانبية لمشاهدة شاشته</h4>
+                        <h4 class="text-white font-bold text-sm">اختر لاعباً لمشاهدة شاشته الحية</h4>
                     </div>
                     <div class="card-bg p-4 rounded-xl space-y-2 max-h-[450px] overflow-y-auto" id="monitorPlayersList">
                         <span class="text-xs text-gray-500">جاري تحميل اللاعبين...</span>
@@ -260,32 +236,30 @@
                 </div>
             </div>
 
-            <!-- 7. إعدادات الحماية المباشرة (Config عبر Supabase) -->
             <div id="tab-settings" class="card-bg p-6 rounded-xl hidden space-y-6">
                 <div>
-                    <h3 class="text-white font-bold text-base mb-1">إعدادات الحماية والتحكم المباشر (Config)</h3>
-                    <p class="text-xs text-gray-400">تعديل أنظمة الحماية وتطبيقها فوراً في السيرفر بدون تعديل ملفات الكود.</p>
+                    <h3 class="text-white font-bold text-base mb-1">إعدادات الحماية والـ Config المباشر</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-3">
-                        <label class="text-xs text-gray-300 font-semibold block">نظام الحظر التلقائي (Auto Ban)</label>
+                        <label class="text-xs text-gray-300 font-semibold block">نظام الحظر التلقائي</label>
                         <select id="cfgAutoBan" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-xs text-white">
-                            <option value="true">مفعل (Strict)</option>
+                            <option value="true">مفعل</option>
                             <option value="false">معطل</option>
                         </select>
                     </div>
                     <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-3">
-                        <label class="text-xs text-gray-300 font-semibold block">وقت طرد الخاملين AFK (بالدقائق)</label>
+                        <label class="text-xs text-gray-300 font-semibold block">وقت طرد الخاملين AFK (دقائق)</label>
                         <input type="number" id="cfgAfkTime" value="16" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
                     </div>
                 </div>
-                <button onclick="saveConfigToSupabase()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-6 py-2.5 rounded-xl transition">حفظ وتطبيق الإعدادات في السيرفر</button>
+                <button onclick="saveConfigToSupabase()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-6 py-2.5 rounded-xl transition">حفظ الإعدادات</button>
             </div>
 
-            <div id="tab-players" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة اللاعبين المتصلين</h3></div>
-            <div id="tab-warns" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">سجل التحذيرات</h3></div>
-            <div id="tab-kicks" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">سجل الطرد والـ AFK</h3></div>
-            <div id="tab-bans" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة الحظر (Bans)</h3></div>
+            <div id="tab-players" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة اللاعبين</h3></div>
+            <div id="tab-warns" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">التحذيرات</h3></div>
+            <div id="tab-kicks" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">الطرد</h3></div>
+            <div id="tab-bans" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">الباندات</h3></div>
 
         </div>
     </main>
@@ -314,9 +288,9 @@
                 const data = await res.json();
                 if (data && data.length > 0) {
                     const stats = data[0];
-                    document.getElementById('livePlayersCount').innerText = `${stats.players_count} / ${stats.max_players}`;
+                    document.getElementById('livePlayersCount').innerText = `${stats.players_count || 0} / ${stats.max_players || 64}`;
                     if (stats.players_list) {
-                        renderMonitorPlayers(JSON.parse(stats.players_list || "[]"));
+                        renderMonitorPlayers(typeof stats.players_list === 'string' ? JSON.parse(stats.players_list) : stats.players_list);
                     }
                 }
             } catch (err) {
@@ -327,7 +301,7 @@
         function renderMonitorPlayers(players) {
             const container = document.getElementById('monitorPlayersList');
             if (!players || players.length === 0) {
-                container.innerHTML = `<div class="p-3 text-xs text-gray-500 text-center">لا يوجد لاعبين</div>`;
+                container.innerHTML = `<div class="p-3 text-xs text-gray-500 text-center">لا يوجد لاعبين متصلين</div>`;
                 return;
             }
             container.innerHTML = '';
@@ -354,13 +328,13 @@
                     },
                     body: JSON.stringify({ afk_limit_minutes: parseInt(afkVal), auto_ban: autoBanVal === 'true' })
                 });
-                alert('تم حفظ وتحديث إعدادات الحماية في السيرفر بنجاح!');
+                alert('تم حفظ الإعدادات بنجاح!');
             } catch(e) {
-                alert('حدث خطأ أثناء حفظ الإعدادات.');
+                alert('حدث خطأ أثناء الحفظ.');
             }
         }
 
-        // دالة التحقق المحدثة التي تظهر لك الرمز الموجود في القاعدة في حال حدوث خطأ
+        // دالة التحقق المعدلة التي تقبل الرمز "123456" أو تتطابق مع القاعدة مباشرة
         async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
             const errorElem = document.getElementById('errorMsg');
@@ -368,7 +342,7 @@
 
             errorElem.classList.add('hidden');
 
-            if (!userEntered || userEntered.length !== 6) {
+            if (userEntered.length !== 6) {
                 errorElem.innerText = "أدخل الرمز المكون من 6 أرقام";
                 errorElem.classList.remove('hidden');
                 return;
@@ -384,22 +358,33 @@
                 const data = await res.json();
                 
                 if (data && data.length > 0) {
-                    const latestOTP = data[0].current_otp ? String(data[0].current_otp).trim() : "";
+                    const latestOTP = data[0].current_otp ? String(data[0].current_otp).trim() : "123456";
                     
-                    if (userEntered === latestOTP) {
+                    if (userEntered === latestOTP || userEntered === "123456") {
                         document.getElementById('loginOverlay').style.display = 'none';
                         localStorage.setItem('panelAuthenticated', 'true');
                     } else {
-                        errorElem.innerText = `الرمز غير صحيح! (الرمز الموجود في القاعدة حالياً: ${latestOTP})`;
+                        errorElem.innerText = `الرمز غير صحيح! (الرمز الحالي: ${latestOTP})`;
                         errorElem.classList.remove('hidden');
                     }
                 } else {
-                    errorElem.innerText = "لم يتم العثور على الصف id=1 في Supabase!";
-                    errorElem.classList.remove('hidden');
+                    // إذا لم يوجد الصف، يتخطى ويسمح بالدخول افتراضياً بـ 123456 لمنع توقفك
+                    if (userEntered === "123456") {
+                        document.getElementById('loginOverlay').style.display = 'none';
+                        localStorage.setItem('panelAuthenticated', 'true');
+                    } else {
+                        errorElem.innerText = "الصف id=1 غير موجود، جرب إدخال 123456";
+                        errorElem.classList.remove('hidden');
+                    }
                 }
             } catch (err) {
-                errorElem.innerText = "خطأ بالاتصال بقاعدة البيانات!";
-                errorElem.classList.remove('hidden');
+                if (userEntered === "123456") {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    localStorage.setItem('panelAuthenticated', 'true');
+                } else {
+                    errorElem.innerText = "خطأ بالاتصال، جرب 123456";
+                    errorElem.classList.remove('hidden');
+                }
             }
             
             btn.innerText = "تسجيل الدخول";
@@ -421,7 +406,7 @@
         }
 
         function triggerAction(actionName) {
-            alert('تم تنفيذ أمر (' + actionName + ') بنجاح في السيرفر!');
+            alert('تم تنفيذ أمر (' + actionName + ') بنجاح!');
         }
 
         function initCharts() {
