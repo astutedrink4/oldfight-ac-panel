@@ -16,17 +16,26 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- شاشة المصادقة الآمنة -->
+    <!-- شاشة المصادقة الآمنة مع زر طلب الرمز -->
     <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0b0f19] flex items-center justify-center">
         <div class="card-bg p-8 rounded-2xl shadow-2xl w-96 border border-gray-800 text-center">
             <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-blue-500/30">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-white font-bold text-lg mb-1">Old Fight AC</h2>
-            <p class="text-xs text-gray-400 mb-6">أدخل رمز المصادقة المتغير (موجود في ديسكورد):</p>
-            <input type="text" id="otpCode" maxlength="6" placeholder="------" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-4 focus:outline-none focus:border-blue-500">
-            <button onclick="verifyOTP()" id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تحقق وفتح البانل</button>
+            <p class="text-xs text-gray-400 mb-6">أدخل رمز المصادقة الواصل على ديسكورد:</p>
+            
+            <input type="text" id="otpCode" maxlength="6" placeholder="------" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-3 focus:outline-none focus:border-blue-500">
+            
+            <button onclick="verifyOTP()" id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30 mb-2">تحقق وفتح البانل</button>
+            
+            <!-- زر طلب رمز OTP جديد -->
+            <button onclick="requestNewOTP()" id="requestOtpBtn" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2 rounded-xl transition text-xs border border-gray-700">
+                <i class="fa-solid fa-paper-plane ml-1"></i> طلب رمز OTP جديد وإرساله للديسكورد
+            </button>
+
             <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو انتهت صلاحيته!</p>
+            <p id="successMsg" class="text-emerald-400 text-xs mt-3 hidden">تم إرسال رمز جديد إلى ديسكورد بنجاح!</p>
         </div>
     </div>
 
@@ -169,12 +178,22 @@
 
         let serverOTP = "";
 
-        // توليد رمز OTP جديد كل دقيقة وحفظه في قاعدة البيانات
-        async function generateAndPublishOTP() {
+        // توليد رمز OTP جديد ونشره في Supabase ليقوم السيرفر بسحبه وإرساله للديسكورد
+        async function requestNewOTP() {
+            const btn = document.getElementById('requestOtpBtn');
+            const successMsg = document.getElementById('successMsg');
+            const errorMsg = document.getElementById('errorMsg');
+            
+            errorMsg.classList.add('hidden');
+            successMsg.classList.add('hidden');
+            
             const newCode = Math.floor(100000 + Math.random() * 900000).toString();
             serverOTP = newCode;
+            
+            btn.innerText = "جاري الإرسال...";
+            
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -184,9 +203,19 @@
                     },
                     body: JSON.stringify({ current_otp: newCode })
                 });
+
+                if (res.ok) {
+                    successMsg.classList.remove('hidden');
+                } else {
+                    errorMsg.innerText = "فشل إرسال الرمز، حاول مرة أخرى.";
+                    errorMsg.classList.remove('hidden');
+                }
             } catch (err) {
-                console.error("خطأ في تحديث الرمز:", err);
+                console.error("خطأ في طلب الرمز:", err);
+                errorMsg.innerText = "خطأ في الاتصال بقاعدة البيانات!";
+                errorMsg.classList.remove('hidden');
             }
+            btn.innerHTML = `<i class="fa-solid fa-paper-plane ml-1"></i> طلب رمز OTP جديد وإرساله للديسكورد`;
         }
 
         async function fetchLiveData() {
@@ -252,11 +281,14 @@
             });
         }
 
-        // التحقق الآمن والمباشر من قاعدة البيانات فور النقر
         async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
             const errorElem = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
             const btn = document.getElementById('verifyBtn');
+
+            errorElem.classList.add('hidden');
+            successMsg.classList.add('hidden');
 
             if (!userEntered || userEntered.length !== 6) {
                 errorElem.innerText = "الرجاء إدخال الرمز المكون من 6 أرقام";
@@ -267,7 +299,6 @@
             btn.innerText = "جاري التحقق...";
             
             try {
-                // جلب أحدث رمز من قاعدة البيانات فوراً للتأكد الدقيق
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -317,10 +348,6 @@
             }
             fetchLiveData();
             setInterval(fetchLiveData, 5000);
-            
-            // توليد رمز جديد عند الدخول لأول مرة وتحديثه كل دقيقة
-            generateAndPublishOTP();
-            setInterval(generateAndPublishOTP, 60000);
             initChart();
         }
 
