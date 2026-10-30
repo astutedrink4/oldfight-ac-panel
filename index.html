@@ -23,7 +23,7 @@
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-white font-bold text-lg mb-1">Old Fight AC - Secure</h2>
-            <p class="text-xs text-gray-400 mb-6">أدخل رمز الدخول السري المصل على ديسكورد:</p>
+            <p class="text-xs text-gray-400 mb-6">أدخل رمز الدخول السري الواصل على ديسكورد:</p>
             
             <input type="text" id="otpCode" maxlength="6" placeholder="------" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-4 focus:outline-none focus:border-blue-500">
             
@@ -229,7 +229,7 @@
             });
         }
 
-      async function verifyOTP() {
+        async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
             const errorElem = document.getElementById('errorMsg');
             const btn = document.getElementById('verifyBtn');
@@ -253,6 +253,7 @@
                     }
                 });
                 const data = await res.json();
+                
                 if (data && data.length > 0) {
                     const latestOTP = data[0].current_otp ? data[0].current_otp.trim() : "";
                     
@@ -264,7 +265,7 @@
                         errorElem.classList.remove('hidden');
                     }
                 } else {
-                    errorElem.innerText = "فشل قراءة الرمز من القاعدة!";
+                    errorElem.innerText = "فشل جلب الرمز من القاعدة (تأكد من وجود الصف id=1)!";
                     errorElem.classList.remove('hidden');
                 }
             } catch (err) {
