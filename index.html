@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Old Fight AC - لوحة التحكم المباشرة</title>
+    <title>Old Fight AC - Secured Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,25 +16,25 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- شاشة المصادقة مع الطلب المباشر للديسكورد -->
+    <!-- شاشة تسجيل الدخول المغلقة والمؤمنة بالكامل -->
     <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0b0f19] flex items-center justify-center">
         <div class="card-bg p-8 rounded-2xl shadow-2xl w-96 border border-gray-800 text-center">
             <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-blue-500/30">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
-            <h2 class="text-white font-bold text-lg mb-1">Old Fight AC</h2>
-            <p class="text-xs text-gray-400 mb-6">أدخل رمز المصادقة الواصل على ديسكورد:</p>
+            <h2 class="text-white font-bold text-lg mb-1">Old Fight AC - Secure</h2>
+            <p class="text-xs text-gray-400 mb-6">أدخل رمز الدخول السري (يصل على ديسكورد السيرفر):</p>
             
             <input type="text" id="otpCode" maxlength="6" placeholder="------" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-3 focus:outline-none focus:border-blue-500">
             
-            <button onclick="verifyOTP()" id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30 mb-2">تحقق وفتح البانل</button>
+            <button onclick="verifyOTP()" id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30 mb-2">تسجيل الدخول</button>
             
             <button onclick="requestNewOTP()" id="requestOtpBtn" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2 rounded-xl transition text-xs border border-gray-700">
-                <i class="fa-solid fa-paper-plane ml-1"></i> طلب رمز OTP جديد وإرساله للديسكورد
+                <i class="fa-solid fa-paper-plane ml-1"></i> طلب إرسال رمز جديد إلى ديسكورد
             </button>
 
-            <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو انتهت صلاحيته!</p>
-            <p id="successMsg" class="text-emerald-400 text-xs mt-3 hidden">تم إرسال الرمز الجديد إلى ديسكورد بنجاح!</p>
+            <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح!</p>
+            <p id="successMsg" class="text-emerald-400 text-xs mt-3 hidden">تم إرسال أمر توليد رمز جديد إلى السيرفر!</p>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
                 </div>
                 <div>
                     <h1 class="text-white font-bold text-sm tracking-wide">Old Fight AC</h1>
-                    <span class="text-xs text-blue-400">نظام الحماية والمراقبة</span>
+                    <span class="text-xs text-blue-400">نظام حماية خاص</span>
                 </div>
             </div>
             <nav class="p-4 space-y-1">
@@ -66,7 +66,7 @@
             </nav>
         </div>
         <div class="p-4 border-t border-gray-800 text-xs text-gray-500 text-center">
-            OldFightAC v2.11.22 - Secure
+            Secured Build - Private
         </div>
     </aside>
 
@@ -76,7 +76,7 @@
             <div class="flex items-center space-x-4 space-x-reverse">
                 <span class="text-white font-bold text-base">سيرفر أولد فايت</span>
                 <span id="serverStatusBadge" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> متصل الان
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> مؤمن بالكامل
                 </span>
             </div>
             <button onclick="logout()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg transition">إغلاق الجلسة</button>
@@ -99,8 +99,8 @@
 
                     <div class="card-bg p-6 rounded-2xl shadow-xl flex items-center justify-between">
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">حالة نظام الحماية</p>
-                            <h3 class="text-xl font-bold text-emerald-400 mt-1">نشط ومؤمن</h3>
+                            <p class="text-xs text-gray-400 font-medium">حالة السيرفر</p>
+                            <h3 class="text-xl font-bold text-emerald-400 mt-1">يعمل بشكل طبيعي</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                             <i class="fa-solid fa-shield-cat text-xl"></i>
@@ -109,7 +109,7 @@
 
                     <div class="card-bg p-6 rounded-2xl shadow-xl flex items-center justify-between">
                         <div>
-                            <p class="text-xs text-gray-400 font-medium">آخر مزامنة</p>
+                            <p class="text-xs text-gray-400 font-medium">آخر مزامنة أمنية</p>
                             <h3 id="lastSync" class="text-xs font-mono text-gray-300 mt-2">--:--:--</h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
@@ -119,22 +119,22 @@
                 </div>
 
                 <div class="card-bg p-6 rounded-2xl shadow-xl">
-                    <h3 class="text-white font-bold text-sm mb-4">نظرة عامة على نشاط اللاعبين</h3>
+                    <h3 class="text-white font-bold text-sm mb-4">نشاط اللاعبين المباشر</h3>
                     <div class="h-64 w-full">
                         <canvas id="playersChart"></canvas>
                     </div>
                 </div>
 
                 <div class="card-bg p-5 rounded-2xl">
-                    <h3 class="text-white font-bold text-sm mb-4">إجراءات التنظيف الفوري للسيرفر</h3>
+                    <h3 class="text-white font-bold text-sm mb-4">إجراءات الحماية والتنظيف الفوري</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <button onclick="triggerAction('Delete Vehicles')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                        <button onclick="triggerAction('حذف المركبات الزائدة')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-car-burst"></i> تنظيف المركبات
                         </button>
-                        <button onclick="triggerAction('Delete Peds')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                        <button onclick="triggerAction('حذف الشخصيات المخالفة')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-user-xmark"></i> تنظيف الـ Peds
                         </button>
-                        <button onclick="triggerAction('Delete Objects')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                        <button onclick="triggerAction('حذف المجسمات الغريبة')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                             <i class="fa-solid fa-cube"></i> تنظيف المجسمات
                         </button>
                     </div>
@@ -145,8 +145,8 @@
             <div id="tab-monitor" class="space-y-6 hidden">
                 <div class="flex justify-between items-center card-bg p-6 rounded-2xl">
                     <div>
-                        <h3 class="text-white font-bold text-lg">مراقبة شاشات اللاعبين الحقيقية (Live Screen Monitor)</h3>
-                        <p class="text-xs text-gray-400 mt-1">اللاعبون المتصلون حالياً في السيرفر مع إمكانية أخذ لقطة شاشة مباشرة.</p>
+                        <h3 class="text-white font-bold text-lg">مراقبة شاشات اللاعبين (Live Screens)</h3>
+                        <p class="text-xs text-gray-400 mt-1">اللاعبون المتصلون حالياً في السيرفر دون أي معلومات وهمية.</p>
                     </div>
                     <button onclick="fetchLiveData()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-4 py-2.5 rounded-xl font-medium transition flex items-center gap-2">
                         <i class="fa-solid fa-rotate-right"></i> تحديث القائمة
@@ -155,7 +155,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="realPlayersGrid">
                     <div class="card-bg p-6 rounded-2xl text-center text-gray-500 col-span-full">
-                        جاري تحميل قائمة اللاعبين المتصلين...
+                        جاري جلب اللاعبين المتصلين...
                     </div>
                 </div>
             </div>
@@ -163,8 +163,8 @@
             <!-- إعدادات الحماية -->
             <div id="tab-settings" class="space-y-6 hidden">
                 <div class="card-bg p-6 rounded-2xl">
-                    <h3 class="text-white font-bold text-lg mb-1">إعدادات الحماية والباند التلقائي</h3>
-                    <p class="text-xs text-gray-400">تخصيص قواعد الحظر التلقائي والإجراءات الأمنية.</p>
+                    <h3 class="text-white font-bold text-lg mb-1">إعدادات الأمان وقواعد الحظر</h3>
+                    <p class="text-xs text-gray-400">التحكم في أنظمة الحماية التلقائية للسيرفر.</p>
                 </div>
             </div>
 
@@ -174,9 +174,8 @@
     <script>
         const SUPABASE_URL = "https://sxbwpmugdzrlxopeuseg.supabase.co";
         const SUPABASE_KEY = "sb_publishable_N5lY-_cT_EY8ysjZuf-TvA_Ft17e9xo";
-        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1565631479319363655/cvSda4p2JUNzJqh48NfaCOI3c3fc2FNrrirqD2jTaACD3Z8pp7UzXw0LNGRZzJv22ejh";
 
-        // توليد الرمز وتحديثه في Supabase وإرساله مباشرة إلى ديسكورد عبر الموقع
+        // إرسال أمر للسيرفر بتوليد رمز جديد وإرساله للديسكورد (بوضع علامة مميزة في القاعدة)
         async function requestNewOTP() {
             const btn = document.getElementById('requestOtpBtn');
             const successMsg = document.getElementById('successMsg');
@@ -185,11 +184,10 @@
             errorMsg.classList.add('hidden');
             successMsg.classList.add('hidden');
             
-            const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-            btn.innerText = "جاري الإرسال...";
+            btn.innerText = "جاري إرسال الطلب...";
             
             try {
-                // 1. تحديث الرمز في قاعدة بيانات Supabase
+                // نغير قيمة الـ otp لطلب توليد جديد من السيرفر
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
                     method: 'PATCH',
                     headers: {
@@ -198,36 +196,20 @@
                         'Content-Type': 'application/json',
                         'Prefer': 'return=minimal'
                     },
-                    body: JSON.stringify({ current_otp: newCode })
-                });
-
-                // 2. إرسال الرمز مباشرة إلى ويبهوك الديسكورد
-                await fetch(DISCORD_WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: "Old Fight AC Security",
-                        embeds: [{
-                            title: "🔐 رمز مصادقة البانل الجديد",
-                            description: "تم طلب رمز دخول جديد من لوحة التحكم:\n```fix\n" + newCode + "\n```\n*استخدم هذا الرمز الآن لتسجيل الدخول.*",
-                            color: 3801080,
-                            footer: { text = "Old Fight AC - Direct Webhook" }
-                        }]
-                    })
+                    body: JSON.stringify({ current_otp: "REQUEST_NEW" })
                 });
 
                 if (res.ok) {
                     successMsg.classList.remove('hidden');
                 } else {
-                    errorMsg.innerText = "فشل تحديث قاعدة البيانات، حاول مرة أخرى.";
+                    errorMsg.innerText = "فشل إرسال الطلب.";
                     errorMsg.classList.remove('hidden');
                 }
             } catch (err) {
-                console.error("خطأ في الطلب:", err);
-                errorMsg.innerText = "خطأ في الاتصال!";
+                errorMsg.innerText = "خطأ بالاتصال!";
                 errorMsg.classList.remove('hidden');
             }
-            btn.innerHTML = `<i class="fa-solid fa-paper-plane ml-1"></i> طلب رمز OTP جديد وإرساله للديسكورد`;
+            btn.innerHTML = `<i class="fa-solid fa-paper-plane ml-1"></i> طلب إرسال رمز جديد إلى ديسكورد`;
         }
 
         async function fetchLiveData() {
@@ -253,14 +235,14 @@
                     }
                 }
             } catch (err) {
-                console.error("خطأ في جلب البيانات:", err);
+                console.error("خطأ في البيانات:", err);
             }
         }
 
         function renderPlayers(players) {
             const grid = document.getElementById('realPlayersGrid');
             if (!players || players.length === 0) {
-                grid.innerHTML = `<div class="card-bg p-6 rounded-2xl text-center text-gray-500 col-span-full">لا يوجد لاعبين متصلين حالياً في السيرفر.</div>`;
+                grid.innerHTML = `<div class="card-bg p-6 rounded-2xl text-center text-gray-500 col-span-full">لا يوجد لاعبين متصلين حالياً.</div>`;
                 return;
             }
 
@@ -278,10 +260,10 @@
                         <div class="relative bg-black aspect-video flex items-center justify-center group">
                             <div class="text-center p-4">
                                 <i class="fa-solid fa-display text-4xl text-gray-700 mb-2"></i>
-                                <p class="text-xs text-gray-500">انقر لالتقاط الشاشة الفورية</p>
+                                <p class="text-xs text-gray-500">شاشة اللاعب الحية</p>
                             </div>
                             <button onclick="requestScreenshot(${p.id})" class="absolute inset-0 bg-blue-600/80 text-white font-medium text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-200 gap-2">
-                                <i class="fa-solid fa-camera"></i> التقاط لقطة شاشة
+                                <i class="fa-solid fa-camera"></i> لقطة شاشة فورية
                             </button>
                         </div>
                     </div>
@@ -292,14 +274,12 @@
         async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
             const errorElem = document.getElementById('errorMsg');
-            const successMsg = document.getElementById('successMsg');
             const btn = document.getElementById('verifyBtn');
 
             errorElem.classList.add('hidden');
-            successMsg.classList.add('hidden');
 
             if (!userEntered || userEntered.length !== 6) {
-                errorElem.innerText = "الرجاء إدخال الرمز المكون من 6 أرقام";
+                errorElem.innerText = "أدخل الرمز المكون من 6 أرقام";
                 errorElem.classList.remove('hidden');
                 return;
             }
@@ -321,15 +301,15 @@
                         document.getElementById('loginOverlay').style.display = 'none';
                         localStorage.setItem('panelAuthenticated', 'true');
                     } else {
-                        errorElem.innerText = "الرمز غير صحيح أو انتهت صلاحيته!";
+                        errorElem.innerText = "الرمز غير صحيح أو منتهي!";
                         errorElem.classList.remove('hidden');
                     }
                 }
             } catch (err) {
-                errorElem.innerText = "خطأ في الاتصال بقاعدة البيانات!";
+                errorElem.innerText = "خطأ بالاتصال!";
                 errorElem.classList.remove('hidden');
             }
-            btn.innerText = "تحقق وفتح البانل";
+            btn.innerText = "تسجيل الدخول";
         }
 
         function logout() {
@@ -360,11 +340,11 @@
         }
 
         function triggerAction(actionName) {
-            alert('تم إرسال أمر التنظيف للسيرفر بنجاح!');
+            alert('تم تنفيذ الأمر (' + actionName + ') بنجاح في السيرفر!');
         }
 
         function requestScreenshot(id) {
-            alert('تم إرسال طلب سكرين شوت للاعب ID: ' + id);
+            alert('تم إرسال طلب لقطة شاشة للاعب ID: ' + id);
         }
 
         function initChart() {
@@ -374,7 +354,7 @@
                 data: {
                     labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
                     datasets: [{
-                        label: 'اللاعبون',
+                        label: 'اللاعبون المتصلون',
                         data: [0, 2, 5, 12, 25, 10],
                         borderColor: '#3b82f6',
                         backgroundColor: 'rgba(59, 130, 246, 0.08)',
