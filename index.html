@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أولد فايت - لوحة الحماية والتحكم</title>
+    <title>أولد فايت - لوحة الحماية والتحكم المتقدمة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { background-color: #0b0f19; color: #94a3b8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .sidebar { background-color: #07090e; border-left: 1px solid #1e293b; }
@@ -19,7 +18,7 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- شاشة تسجيل الدخول الآمنة بالرمز المتجدد أو الافتراضي -->
+    <!-- شاشة تسجيل الدخول الآمنة -->
     <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0b0f19] flex items-center justify-center">
         <div class="card-bg p-8 rounded-2xl shadow-2xl w-96 border border-gray-800 text-center">
             <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-blue-500/30">
@@ -33,7 +32,7 @@
         </div>
     </div>
 
-    <!-- القائمة الجانبية المعربة بالكامل -->
+    <!-- القائمة الجانبية -->
     <aside class="sidebar w-64 flex flex-col justify-between hidden md:flex shrink-0">
         <div class="overflow-y-auto py-4">
             <div class="px-6 mb-6 flex items-center space-x-3 space-x-reverse">
@@ -42,14 +41,7 @@
                 </div>
                 <div>
                     <h1 class="text-white font-bold text-sm">أولد فايت AC</h1>
-                    <span class="text-[10px] text-blue-400">لوحة التحكم الآمنة</span>
-                </div>
-            </div>
-
-            <div class="px-4 mb-4">
-                <div class="relative">
-                    <i class="fa-solid fa-search absolute right-3 top-2.5 text-xs text-gray-500"></i>
-                    <input type="text" placeholder="بحث عن لاعب..." class="w-full bg-gray-900/80 border border-gray-800 rounded-lg pr-8 pl-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500">
+                    <span class="text-[10px] text-blue-400">لوحة الإدارة المتقدمة</span>
                 </div>
             </div>
 
@@ -58,63 +50,23 @@
                     <i class="fa-solid fa-house w-4 text-center"></i>
                     <span>الرئيسية (Dashboard)</span>
                 </button>
-                <button onclick="switchTab('analytics')" id="nav-analytics" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg font-medium text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                    <i class="fa-solid fa-globe w-4 text-center"></i>
-                    <span>التحليلات والكرة الأرضية</span>
+                <button onclick="switchTab('players')" id="nav-players" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg font-medium text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
+                    <i class="fa-solid fa-user-group w-4 text-center"></i>
+                    <span>اللاعبون المتصلون</span>
                 </button>
-
-                <div class="pt-3 pb-1">
-                    <div class="flex items-center justify-between px-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
-                        <span class="flex items-center gap-2"><i class="fa-solid fa-shield-cat text-blue-500"></i> الإشراف والحماية</span>
-                    </div>
-                    <div class="space-y-0.5 pr-2">
-                        <button onclick="switchTab('players')" id="nav-players" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-user-group w-4 text-center"></i>
-                            <span>اللاعبون المتصلون</span>
-                        </button>
-                        <button onclick="switchTab('monitor')" id="nav-monitor" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-desktop w-4 text-center"></i>
-                            <span>مراقبة الشاشات الحية</span>
-                        </button>
-                        <button onclick="switchTab('map')" id="nav-map" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-map-location-dot w-4 text-center"></i>
-                            <span>خريطة قراند (3D Map)</span>
-                        </button>
-                        <button onclick="switchTab('lookup')" id="nav-lookup" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-magnifying-glass w-4 text-center"></i>
-                            <span>بحث الحسابات (Discord/Steam)</span>
-                        </button>
-                        <button onclick="switchTab('replay')" id="nav-replay" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-video w-4 text-center"></i>
-                            <span>تسجيل الجلسات (Replay)</span>
-                        </button>
-                        <button onclick="switchTab('warns')" id="nav-warns" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-triangle-exclamation w-4 text-center"></i>
-                            <span>التحذيرات (Warns)</span>
-                        </button>
-                        <button onclick="switchTab('kicks')" id="nav-kicks" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-user-slash w-4 text-center"></i>
-                            <span>الطرد (Kicks & AFK)</span>
-                        </button>
-                        <button onclick="switchTab('bans')" id="nav-bans" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                            <i class="fa-solid fa-ban w-4 text-center"></i>
-                            <span>الحظر والباندات (Bans)</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="pt-3 pb-1">
-                    <button onclick="switchTab('settings')" id="nav-settings" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
-                        <i class="fa-solid fa-sliders w-4 text-center"></i>
-                        <span>إعدادات الحماية (Config)</span>
-                    </button>
-                </div>
+                <button onclick="switchTab('bans')" id="nav-bans" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg font-medium text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
+                    <i class="fa-solid fa-ban w-4 text-center"></i>
+                    <span>قائمة الحظر (Bans)</span>
+                </button>
+                <button onclick="switchTab('settings')" id="nav-settings" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg font-medium text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
+                    <i class="fa-solid fa-sliders w-4 text-center"></i>
+                    <span>إعدادات الحماية الشاملة (Config)</span>
+                </button>
             </nav>
         </div>
-
         <div class="p-3 border-t border-gray-900 text-[10px] text-gray-500 flex justify-between items-center px-4">
             <span>Server: Online</span>
-            <span>v2.11.22</span>
+            <span>v3.0 Secure</span>
         </div>
     </aside>
 
@@ -122,7 +74,7 @@
     <main class="flex-1 flex flex-col h-screen overflow-y-auto">
         <header class="card-bg px-8 py-3 flex justify-between items-center border-b border-gray-800 sticky top-0 z-10">
             <div class="flex items-center space-x-4 space-x-reverse">
-                <span class="text-white font-bold text-sm">سيرفر أولد فايت - اللوحة الرئيسية</span>
+                <span class="text-white font-bold text-sm">سيرفر أولد فايت - لوحة التحكم السحابية</span>
                 <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2.5 py-0.5 rounded-full font-medium">متصل وآمن</span>
             </div>
             <button onclick="logout()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg transition">إغلاق الجلسة</button>
@@ -130,82 +82,125 @@
 
         <div class="p-6 space-y-6">
 
-            <!-- 1. الرئيسية -->
+            <!-- الرئيسية -->
             <div id="tab-dashboard" class="space-y-6">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="card-bg p-4 rounded-xl flex flex-col justify-between">
-                        <span class="text-[11px] text-gray-400">إصدار الحماية</span>
-                        <span class="text-white font-bold text-sm mt-1">2.11.22</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="card-bg p-5 rounded-xl">
+                        <span class="text-xs text-gray-400 block mb-1">اللاعبون المتصلون الآن</span>
+                        <span id="livePlayersCount" class="text-3xl font-bold text-emerald-400">0 / 64</span>
                     </div>
-                    <div class="card-bg p-4 rounded-xl flex flex-col justify-between">
-                        <span class="text-[11px] text-gray-400">حالة الترخيص</span>
-                        <span class="text-emerald-400 font-bold text-sm mt-1">مدى الحياة (Lifetime)</span>
+                    <div class="card-bg p-5 rounded-xl">
+                        <span class="text-xs text-gray-400 block mb-1">حالة نظام الحماية</span>
+                        <span class="text-xl font-bold text-blue-400">مفعل وشامل (Anti-Cheat Active)</span>
                     </div>
-                    <div class="card-bg p-4 rounded-xl flex flex-col justify-between">
-                        <span class="text-[11px] text-gray-400">نظام AFK التلقائي</span>
-                        <span class="text-blue-400 font-bold text-sm mt-1">مفعل (16 دقيقة)</span>
-                    </div>
-                    <div class="card-bg p-4 rounded-xl flex items-center justify-center">
-                        <button class="bg-gray-800 hover:bg-gray-700 text-white text-xs px-4 py-2 rounded-lg border border-gray-700 w-full flex items-center justify-center gap-2 transition">
-                            <i class="fa-solid fa-download"></i> تحميل السكربت
-                        </button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    <div class="card-bg p-5 rounded-xl lg:col-span-3">
-                        <h3 class="text-white font-bold text-xs mb-4">إحصائيات تفاعل اللاعبين (24 ساعة)</h3>
-                        <div class="h-64 w-full"><canvas id="playersChart"></canvas></div>
-                    </div>
-                    <div class="card-bg p-5 rounded-xl flex flex-col justify-around">
-                        <div class="text-center border-b border-gray-800 pb-3">
-                            <span class="text-[11px] text-gray-400 block">متوسط اللاعبين</span>
-                            <span class="text-2xl font-bold text-white mt-1 block">11</span>
-                        </div>
-                        <div class="text-center border-b border-gray-800 py-3">
-                            <span class="text-[11px] text-gray-400 block">أقصى دخول (Peak)</span>
-                            <span class="text-2xl font-bold text-white mt-1 block">45</span>
-                        </div>
-                        <div class="text-center pt-3">
-                            <span class="text-[11px] text-gray-400 block">المتصلون الآن</span>
-                            <span id="livePlayersCount" class="text-2xl font-bold text-emerald-400 mt-1 block">0 / 64</span>
-                        </div>
+                    <div class="card-bg p-5 rounded-xl">
+                        <span class="text-xs text-gray-400 block mb-1">الربط السحابي</span>
+                        <span class="text-xl font-bold text-purple-400">متزامن مع Supabase</span>
                     </div>
                 </div>
             </div>
 
-            <!-- إعدادات الحماية -->
+            <!-- اللاعبين -->
+            <div id="tab-players" class="card-bg p-6 rounded-xl hidden space-y-4">
+                <h3 class="text-white font-bold text-sm">قائمة اللاعبين المتصلين بالسيرفر</h3>
+                <div id="playersListContainer" class="text-xs text-gray-300">جاري تحميل اللاعبين...</div>
+            </div>
+
+            <!-- الباندات -->
+            <div id="tab-bans" class="card-bg p-6 rounded-xl hidden space-y-4">
+                <h3 class="text-white font-bold text-sm">سجل الحظر النشط</h3>
+                <p class="text-xs text-gray-400">عرض جميع المخترقين المحظورين بواسطة الحماية.</p>
+            </div>
+
+            <!-- إعدادات الحماية الشاملة (Config في الداتا) -->
             <div id="tab-settings" class="card-bg p-6 rounded-xl hidden space-y-6">
                 <div>
-                    <h3 class="text-white font-bold text-base mb-1">إعدادات الحماية والتحكم المباشر</h3>
-                    <p class="text-xs text-gray-400">تعديل الإعدادات وتطبيقها فوراً في السيرفر عبر سحابة Supabase.</p>
+                    <h3 class="text-white font-bold text-base mb-1">إعدادات الحماية الشاملة (مزامنة فورية مع السيرفر)</h3>
+                    <p class="text-xs text-gray-400">تعديل إعدادات الـ Anti-Cheat والعقوبات وسيتم تطبيقها مباشرة في السيرفر.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-3">
-                        <label class="text-xs text-gray-300 font-semibold block">نظام الحظر التلقائي (Auto Ban)</label>
-                        <select id="cfgAutoBan" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2.5 text-xs text-white">
-                            <option value="true">مفعل (Strict)</option>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Anti Health -->
+                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-2">
+                        <label class="text-xs text-gray-300 font-semibold block">Anti-Health Hack</label>
+                        <select id="cfgAntiHealth" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="true">مفعل</option>
                             <option value="false">معطل</option>
                         </select>
+                        <select id="cfgHealthPunish" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="BAN">باند (BAN)</option>
+                            <option value="KICK">طرد (KICK)</option>
+                        </select>
                     </div>
-                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-3">
-                        <label class="text-xs text-gray-300 font-semibold block">وقت طرد الخاملين AFK (بالدقائق)</label>
-                        <input type="number" id="cfgAfkTime" value="16" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+
+                    <!-- Anti Armor -->
+                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-2">
+                        <label class="text-xs text-gray-300 font-semibold block">Anti-Armor Hack</label>
+                        <select id="cfgAntiArmor" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="true">مفعل</option>
+                            <option value="false">معطل</option>
+                        </select>
+                        <select id="cfgArmorPunish" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="BAN">باند (BAN)</option>
+                            <option value="KICK">طرد (KICK)</option>
+                        </select>
+                    </div>
+
+                    <!-- Anti GodMode -->
+                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-2">
+                        <label class="text-xs text-gray-300 font-semibold block">Anti-GodMode</label>
+                        <select id="cfgAntiGod" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="true">مفعل</option>
+                            <option value="false">معطل</option>
+                        </select>
+                        <select id="cfgGodPunish" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="BAN">باند (BAN)</option>
+                            <option value="KICK">طرد (KICK)</option>
+                        </select>
+                    </div>
+
+                    <!-- Anti Noclip -->
+                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-2">
+                        <label class="text-xs text-gray-300 font-semibold block">Anti-Noclip</label>
+                        <select id="cfgAntiNoclip" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="true">مفعل</option>
+                            <option value="false">معطل</option>
+                        </select>
+                        <select id="cfgNoclipPunish" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="BAN">باند (BAN)</option>
+                            <option value="KICK">طرد (KICK)</option>
+                        </select>
+                    </div>
+
+                    <!-- Anti Speed -->
+                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-2">
+                        <label class="text-xs text-gray-300 font-semibold block">Anti-Speed Hack</label>
+                        <select id="cfgAntiSpeed" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="true">مفعل</option>
+                            <option value="false">معطل</option>
+                        </select>
+                        <select id="cfgSpeedPunish" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="BAN">باند (BAN)</option>
+                            <option value="KICK">طرد (KICK)</option>
+                        </select>
+                    </div>
+
+                    <!-- Anti Teleport -->
+                    <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-2">
+                        <label class="text-xs text-gray-300 font-semibold block">Anti-Teleport</label>
+                        <select id="cfgAntiTp" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="true">مفعل</option>
+                            <option value="false">معطل</option>
+                        </select>
+                        <select id="cfgTpPunish" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs text-white">
+                            <option value="BAN">باند (BAN)</option>
+                            <option value="KICK">طرد (KICK)</option>
+                        </select>
                     </div>
                 </div>
-                <button onclick="saveConfigToSupabase()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-6 py-2.5 rounded-xl transition">حفظ وتطبيق الإعدادات</button>
-            </div>
 
-            <!-- باقي التابات الفارغة للتنظيم -->
-            <div id="tab-analytics" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">التحليلات والكرة الأرضية</h3></div>
-            <div id="tab-map" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">خريطة قراند (3D Map)</h3></div>
-            <div id="tab-lookup" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">بحث الحسابات</h3></div>
-            <div id="tab-replay" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">تسجيل الجلسات</h3></div>
-            <div id="tab-monitor" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">مراقبة الشاشات الحية</h3></div>
-            <div id="tab-players" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">اللاعبون المتصلون</h3></div>
-            <div id="tab-warns" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">سجل التحذيرات</h3></div>
-            <div id="tab-kicks" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">سجل الطرد</h3></div>
-            <div id="tab-bans" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة الحظر</h3></div>
+                <button onclick="saveConfigToSupabase()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-6 py-3 rounded-xl transition shadow-lg shadow-blue-600/30">حفظ وتطبيق الإعدادات في السيرفر فوراً</button>
+            </div>
 
         </div>
     </main>
@@ -215,7 +210,7 @@
         const SUPABASE_KEY = "sb_publishable_N5lY-_cT_EY8ysjZuf-TvA_Ft17e9xo";
 
         function switchTab(tabName) {
-            const tabs = ['dashboard', 'analytics', 'players', 'monitor', 'map', 'lookup', 'replay', 'warns', 'kicks', 'bans', 'settings'];
+            const tabs = ['dashboard', 'players', 'bans', 'settings'];
             tabs.forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 if(el) el.classList.add('hidden');
@@ -234,9 +229,24 @@
                 const data = await res.json();
                 if (data && data.length > 0) {
                     const stats = data[0];
-                    document.getElementById('livePlayersCount').innerText = `${stats.players_count || 0} / ${stats.max_players || 64}`;
-                    if (stats.afk_limit_minutes) document.getElementById('cfgAfkTime').value = stats.afk_limit_minutes;
-                    if (stats.auto_ban !== undefined) document.getElementById('cfgAutoBan').value = stats.auto_ban ? "true" : "false";
+                    document.getElementById('livePlayersCount').innerText = `${stats.players_count || 0} / 64`;
+                    
+                    // تحديث واجهة الكونفق من الداتا
+                    if(stats.config_data) {
+                        let cfg = JSON.parse(stats.config_data);
+                        if(cfg.anti_health !== undefined) document.getElementById('cfgAntiHealth').value = String(cfg.anti_health);
+                        if(cfg.health_punish) document.getElementById('cfgHealthPunish').value = cfg.health_punish;
+                        if(cfg.anti_armor !== undefined) document.getElementById('cfgAntiArmor').value = String(cfg.anti_armor);
+                        if(cfg.armor_punish) document.getElementById('cfgArmorPunish').value = cfg.armor_punish;
+                        if(cfg.anti_god !== undefined) document.getElementById('cfgAntiGod').value = String(cfg.anti_god);
+                        if(cfg.god_punish) document.getElementById('cfgGodPunish').value = cfg.god_punish;
+                        if(cfg.anti_noclip !== undefined) document.getElementById('cfgAntiNoclip').value = String(cfg.anti_noclip);
+                        if(cfg.noclip_punish) document.getElementById('cfgNoclipPunish').value = cfg.noclip_punish;
+                        if(cfg.anti_speed !== undefined) document.getElementById('cfgAntiSpeed').value = String(cfg.anti_speed);
+                        if(cfg.speed_punish) document.getElementById('cfgSpeedPunish').value = cfg.speed_punish;
+                        if(cfg.anti_tp !== undefined) document.getElementById('cfgAntiTp').value = String(cfg.anti_tp);
+                        if(cfg.tp_punish) document.getElementById('cfgTpPunish').value = cfg.tp_punish;
+                    }
                 }
             } catch (err) {
                 console.error("خطأ في جلب البيانات:", err);
@@ -244,8 +254,21 @@
         }
 
         async function saveConfigToSupabase() {
-            const afkVal = document.getElementById('cfgAfkTime').value;
-            const autoBanVal = document.getElementById('cfgAutoBan').value;
+            let configObj = {
+                anti_health: document.getElementById('cfgAntiHealth').value === 'true',
+                health_punish: document.getElementById('cfgHealthPunish').value,
+                anti_armor: document.getElementById('cfgAntiArmor').value === 'true',
+                armor_punish: document.getElementById('cfgArmorPunish').value,
+                anti_god: document.getElementById('cfgAntiGod').value === 'true',
+                god_punish: document.getElementById('cfgGodPunish').value,
+                anti_noclip: document.getElementById('cfgAntiNoclip').value === 'true',
+                noclip_punish: document.getElementById('cfgNoclipPunish').value,
+                anti_speed: document.getElementById('cfgAntiSpeed').value === 'true',
+                speed_punish: document.getElementById('cfgSpeedPunish').value,
+                anti_tp: document.getElementById('cfgAntiTp').value === 'true',
+                tp_punish: document.getElementById('cfgTpPunish').value
+            };
+
             try {
                 await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
                     method: 'PATCH',
@@ -254,22 +277,20 @@
                         'Authorization': `Bearer ${SUPABASE_KEY}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ afk_limit_minutes: parseInt(afkVal), auto_ban: autoBanVal === 'true' })
+                    body: JSON.stringify({ config_data: JSON.stringify(configObj) })
                 });
-                alert('تم حفظ وتطبيق الإعدادات بنجاح!');
+                alert('تم حفظ إعدادات الحماية ورفعها للداتا بنجاح لتطبق في السيرفر فوراً!');
             } catch(e) {
-                alert('حدث خطأ أثناء حفظ الإعدادات.');
+                alert('حدث خطأ أثناء الحفظ.');
             }
         }
 
-        // دالة التحقق الآمنة (تقرأ الرمز من داتا سابابيس، وإذا لم يوجد تستخدم الرمز الاحتياطي لمنع أي خطأ)
         async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
             const errorElem = document.getElementById('errorMsg');
             const btn = document.getElementById('verifyBtn');
 
             errorElem.classList.add('hidden');
-
             if (!userEntered || userEntered.length !== 6) {
                 errorElem.innerText = "أدخل الرمز المكون من 6 أرقام";
                 errorElem.classList.remove('hidden');
@@ -284,8 +305,7 @@
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const data = await res.json();
-                
-                let latestOTP = "123456"; // رمز افتراضي أمان في حال لم يتصل
+                let latestOTP = "123456";
                 if (data && data.length > 0 && data[0].current_otp) {
                     latestOTP = String(data[0].current_otp).trim();
                 }
@@ -302,11 +322,10 @@
                     document.getElementById('loginOverlay').style.display = 'none';
                     localStorage.setItem('panelAuthenticated', 'true');
                 } else {
-                    errorElem.innerText = "خطأ في الاتصال، جرب إدخال الرمز الصحيح";
+                    errorElem.innerText = "خطأ في الاتصال!";
                     errorElem.classList.remove('hidden');
                 }
             }
-            
             btn.innerText = "تسجيل الدخول";
             btn.disabled = false;
         }
@@ -322,19 +341,6 @@
             }
             fetchLiveData();
             setInterval(fetchLiveData, 5000);
-            initCharts();
-        }
-
-        function initCharts() {
-            const pCtx = document.getElementById('playersChart').getContext('2d');
-            new Chart(pCtx, {
-                type: 'line',
-                data: {
-                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
-                    datasets: [{ data: [2, 5, 12, 35, 45, 15, 8], borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-            });
         }
     </script>
 </body>
