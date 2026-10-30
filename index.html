@@ -22,7 +22,7 @@
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-white font-bold text-lg mb-1">Old Fight AC</h2>
-            <p class="text-xs text-gray-400 mb-6">تم إرسال رمز التحقق المتغير إلى ويبهوك الديسكورد الخاص بك. أدخل الرمز المكون من 6 أرقام:</p>
+            <p class="text-xs text-gray-400 mb-6">أدخل الرمز المكون من 6 أرقام الواصل في ديسكورد:</p>
             <input type="text" id="otpCode" maxlength="6" placeholder="123456" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-4 focus:outline-none focus:border-blue-500">
             <button onclick="verifyOTP()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تحقق وفتح البانل</button>
             <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو انتهت صلاحيته!</p>
@@ -105,7 +105,6 @@
                 </div>
             </div>
 
-            <!-- أزرار التحكم الفوري -->
             <div class="card-bg p-5 rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button onclick="triggerAction('Delete Vehicles')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-car-burst"></i> Delete Vehicles
@@ -113,7 +112,7 @@
                 <button onclick="triggerAction('Delete Peds')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-user-xmark"></i> Delete Peds
                 </button>
-                <button onclick="رياضة" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2" onclick="triggerAction('Delete Objects')">
+                <button onclick="triggerAction('Delete Objects')" class="bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 border border-gray-700 text-gray-300 hover:text-red-400 text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-cube"></i> Delete Objects
                 </button>
             </div>
@@ -121,19 +120,26 @@
     </main>
 
     <script>
-        // خوارزمية حساب الرمز بناءً على الوقت (يتغير تلقائياً كل دقيقة بنفس الكود المتزامن مع السيرفر)
-        function generateCurrentOTP() {
-            const timeBlock = Math.floor(Date.now() / 60000); // يتغير كل دقيقة
-            const secretSeed = 987654; // مفتاح سري موحد بينك وبين السيرفر
-            const code = Math.abs(Math.sin(timeBlock * secretSeed) * 1000000).toFixed(0);
-            return code.padStart(6, '0');
+        // دالة توليد الرمز مع السماح بفارق دقيقة سابقة أو لاحقة لتفادي مشاكل توقيت السيرفر
+        function getValidOTPs() {
+            const secretSeed = 987654;
+            const now = Date.now();
+            const codes = [];
+            
+            // فحص الدقيقة الحالية، السابقة، والقادمة لتفادي فرق التوقيت
+            for (let i = -1; i <= 1; i++) {
+                const timeBlock = Math.floor(now / 60000) + i;
+                const code = Math.abs(Math.sin(timeBlock * secretSeed) * 1000000).toFixed(0);
+                codes.push(code.padStart(6, '0'));
+            }
+            return codes;
         }
 
         function verifyOTP() {
-            const userEntered = document.getElementById('otpCode').value;
-            const validCode = generateCurrentOTP();
+            const userEntered = document.getElementById('otpCode').value.trim();
+            const validCodes = getValidOTPs();
 
-            if (userEntered === validCode || userEntered === "999888") { // 999888 رمز طوارئ ثابت
+            if (validCodes.includes(userEntered) || userEntered === "999888") {
                 document.getElementById('loginOverlay').style.display = 'none';
                 localStorage.setItem('panelAuthenticated', 'true');
             } else {
@@ -152,7 +158,6 @@
             }
         }
 
-        // إعداد الرسم البياني
         const ctx = document.getElementById('playersChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
