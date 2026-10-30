@@ -25,7 +25,7 @@
             <h2 class="text-white font-bold text-lg mb-1">Old Fight AC</h2>
             <p class="text-xs text-gray-400 mb-6">أدخل رمز المصادقة المتغير (موجود في ديسكورد):</p>
             <input type="text" id="otpCode" maxlength="6" placeholder="------" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white text-center tracking-widest text-lg font-mono mb-4 focus:outline-none focus:border-blue-500">
-            <button onclick="verifyOTP()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تحقق وفتح البانل</button>
+            <button onclick="verifyOTP()" id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30">تحقق وفتح البانل</button>
             <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو انتهت صلاحيته!</p>
         </div>
     </div>
@@ -146,7 +146,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="realPlayersGrid">
-                    <!-- سيتم تعبئتها ديناميكياً باللاعبين الحقيقيين فقط -->
                     <div class="card-bg p-6 rounded-2xl text-center text-gray-500 col-span-full">
                         جاري تحميل قائمة اللاعبين المتصلين...
                     </div>
@@ -170,7 +169,7 @@
 
         let serverOTP = "";
 
-        // توليد رمز OTP جديد كل دقيقة وحفظه في قاعدة البيانات ليأخذه السيرفر للديسكورد
+        // توليد رمز OTP جديد كل دقيقة وحفظه في قاعدة البيانات
         async function generateAndPublishOTP() {
             const newCode = Math.floor(100000 + Math.random() * 900000).toString();
             serverOTP = newCode;
@@ -208,7 +207,6 @@
                         serverOTP = stats.current_otp.trim();
                     }
 
-                    // عرض اللاعبين الحقيقيين في قسم المراقبة
                     if (stats.players_list) {
                         renderPlayers(JSON.parse(stats.players_list || "[]"));
                     }
@@ -254,14 +252,45 @@
             });
         }
 
-        function verifyOTP() {
+        // التحقق الآمن والمباشر من قاعدة البيانات فور النقر
+        async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
-            if (userEntered === serverOTP && userEntered !== "") {
-                document.getElementById('loginOverlay').style.display = 'none';
-                localStorage.setItem('panelAuthenticated', 'true');
-            } else {
-                document.getElementById('errorMsg').classList.remove('hidden');
+            const errorElem = document.getElementById('errorMsg');
+            const btn = document.getElementById('verifyBtn');
+
+            if (!userEntered || userEntered.length !== 6) {
+                errorElem.innerText = "الرجاء إدخال الرمز المكون من 6 أرقام";
+                errorElem.classList.remove('hidden');
+                return;
             }
+
+            btn.innerText = "جاري التحقق...";
+            
+            try {
+                // جلب أحدث رمز من قاعدة البيانات فوراً للتأكد الدقيق
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`
+                    }
+                });
+                const data = await res.json();
+                if (data && data.length > 0) {
+                    const latestOTP = data[0].current_otp ? data[0].current_otp.trim() : "";
+                    
+                    if (userEntered === latestOTP) {
+                        document.getElementById('loginOverlay').style.display = 'none';
+                        localStorage.setItem('panelAuthenticated', 'true');
+                    } else {
+                        errorElem.innerText = "الرمز غير صحيح أو انتهت صلاحيته!";
+                        errorElem.classList.remove('hidden');
+                    }
+                }
+            } catch (err) {
+                errorElem.innerText = "خطأ في الاتصال بقاعدة البيانات!";
+                errorElem.classList.remove('hidden');
+            }
+            btn.innerText = "تحقق وفتح البانل";
         }
 
         function logout() {
@@ -287,9 +316,9 @@
                 document.getElementById('loginOverlay').style.display = 'none';
             }
             fetchLiveData();
-            setInterval(fetchLiveData, 5000); // تحديث دوري كل 5 ثواني
+            setInterval(fetchLiveData, 5000);
             
-            // تحديث الرمز كل دقيقة من الموقع
+            // توليد رمز جديد عند الدخول لأول مرة وتحديثه كل دقيقة
             generateAndPublishOTP();
             setInterval(generateAndPublishOTP, 60000);
             initChart();
