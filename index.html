@@ -360,27 +360,50 @@
             }
         }
 
+        // دالة التحقق المحدثة التي تظهر لك الرمز الموجود في القاعدة في حال حدوث خطأ
         async function verifyOTP() {
             const userEntered = document.getElementById('otpCode').value.trim();
             const errorElem = document.getElementById('errorMsg');
-            if (userEntered.length !== 6) {
+            const btn = document.getElementById('verifyBtn');
+
+            errorElem.classList.add('hidden');
+
+            if (!userEntered || userEntered.length !== 6) {
+                errorElem.innerText = "أدخل الرمز المكون من 6 أرقام";
                 errorElem.classList.remove('hidden');
                 return;
             }
+
+            btn.innerText = "جاري التحقق...";
+            btn.disabled = true;
+
             try {
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
                 const data = await res.json();
-                if (data && data.length > 0 && userEntered === data[0].current_otp.trim()) {
-                    document.getElementById('loginOverlay').style.display = 'none';
-                    localStorage.setItem('panelAuthenticated', 'true');
+                
+                if (data && data.length > 0) {
+                    const latestOTP = data[0].current_otp ? String(data[0].current_otp).trim() : "";
+                    
+                    if (userEntered === latestOTP) {
+                        document.getElementById('loginOverlay').style.display = 'none';
+                        localStorage.setItem('panelAuthenticated', 'true');
+                    } else {
+                        errorElem.innerText = `الرمز غير صحيح! (الرمز الموجود في القاعدة حالياً: ${latestOTP})`;
+                        errorElem.classList.remove('hidden');
+                    }
                 } else {
+                    errorElem.innerText = "لم يتم العثور على الصف id=1 في Supabase!";
                     errorElem.classList.remove('hidden');
                 }
             } catch (err) {
+                errorElem.innerText = "خطأ بالاتصال بقاعدة البيانات!";
                 errorElem.classList.remove('hidden');
             }
+            
+            btn.innerText = "تسجيل الدخول";
+            btn.disabled = false;
         }
 
         function logout() {
