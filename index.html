@@ -16,7 +16,7 @@
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- شاشة المصادقة الآمنة مع زر طلب الرمز -->
+    <!-- شاشة المصادقة مع الطلب المباشر للديسكورد -->
     <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0b0f19] flex items-center justify-center">
         <div class="card-bg p-8 rounded-2xl shadow-2xl w-96 border border-gray-800 text-center">
             <div class="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-4 shadow-lg shadow-blue-500/30">
@@ -29,13 +29,12 @@
             
             <button onclick="verifyOTP()" id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-lg shadow-blue-600/30 mb-2">تحقق وفتح البانل</button>
             
-            <!-- زر طلب رمز OTP جديد -->
             <button onclick="requestNewOTP()" id="requestOtpBtn" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2 rounded-xl transition text-xs border border-gray-700">
                 <i class="fa-solid fa-paper-plane ml-1"></i> طلب رمز OTP جديد وإرساله للديسكورد
             </button>
 
             <p id="errorMsg" class="text-red-500 text-xs mt-3 hidden">الرمز غير صحيح أو انتهت صلاحيته!</p>
-            <p id="successMsg" class="text-emerald-400 text-xs mt-3 hidden">تم إرسال رمز جديد إلى ديسكورد بنجاح!</p>
+            <p id="successMsg" class="text-emerald-400 text-xs mt-3 hidden">تم إرسال الرمز الجديد إلى ديسكورد بنجاح!</p>
         </div>
     </div>
 
@@ -175,10 +174,9 @@
     <script>
         const SUPABASE_URL = "https://sxbwpmugdzrlxopeuseg.supabase.co";
         const SUPABASE_KEY = "sb_publishable_N5lY-_cT_EY8ysjZuf-TvA_Ft17e9xo";
+        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1565631479319363655/cvSda4p2JUNzJqh48NfaCOI3c3fc2FNrrirqD2jTaACD3Z8pp7UzXw0LNGRZzJv22ejh";
 
-        let serverOTP = "";
-
-        // توليد رمز OTP جديد ونشره في Supabase ليقوم السيرفر بسحبه وإرساله للديسكورد
+        // توليد الرمز وتحديثه في Supabase وإرساله مباشرة إلى ديسكورد عبر الموقع
         async function requestNewOTP() {
             const btn = document.getElementById('requestOtpBtn');
             const successMsg = document.getElementById('successMsg');
@@ -188,11 +186,10 @@
             successMsg.classList.add('hidden');
             
             const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-            serverOTP = newCode;
-            
             btn.innerText = "جاري الإرسال...";
             
             try {
+                // 1. تحديث الرمز في قاعدة بيانات Supabase
                 const res = await fetch(`${SUPABASE_URL}/rest/v1/server_stats?id=eq.1`, {
                     method: 'PATCH',
                     headers: {
@@ -204,15 +201,30 @@
                     body: JSON.stringify({ current_otp: newCode })
                 });
 
+                // 2. إرسال الرمز مباشرة إلى ويبهوك الديسكورد
+                await fetch(DISCORD_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: "Old Fight AC Security",
+                        embeds: [{
+                            title: "🔐 رمز مصادقة البانل الجديد",
+                            description: "تم طلب رمز دخول جديد من لوحة التحكم:\n```fix\n" + newCode + "\n```\n*استخدم هذا الرمز الآن لتسجيل الدخول.*",
+                            color: 3801080,
+                            footer: { text = "Old Fight AC - Direct Webhook" }
+                        }]
+                    })
+                });
+
                 if (res.ok) {
                     successMsg.classList.remove('hidden');
                 } else {
-                    errorMsg.innerText = "فشل إرسال الرمز، حاول مرة أخرى.";
+                    errorMsg.innerText = "فشل تحديث قاعدة البيانات، حاول مرة أخرى.";
                     errorMsg.classList.remove('hidden');
                 }
             } catch (err) {
-                console.error("خطأ في طلب الرمز:", err);
-                errorMsg.innerText = "خطأ في الاتصال بقاعدة البيانات!";
+                console.error("خطأ في الطلب:", err);
+                errorMsg.innerText = "خطأ في الاتصال!";
                 errorMsg.classList.remove('hidden');
             }
             btn.innerHTML = `<i class="fa-solid fa-paper-plane ml-1"></i> طلب رمز OTP جديد وإرساله للديسكورد`;
@@ -231,10 +243,6 @@
                     const stats = data[0];
                     document.getElementById('livePlayers').innerText = stats.players_count;
                     document.getElementById('maxPlayers').innerText = stats.max_players;
-                    
-                    if (stats.current_otp) {
-                        serverOTP = stats.current_otp.trim();
-                    }
 
                     if (stats.players_list) {
                         renderPlayers(JSON.parse(stats.players_list || "[]"));
@@ -245,7 +253,7 @@
                     }
                 }
             } catch (err) {
-                console.error("خطأ في جلب بيانات البانل:", err);
+                console.error("خطأ في جلب البيانات:", err);
             }
         }
 
