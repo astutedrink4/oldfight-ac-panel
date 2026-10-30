@@ -46,7 +46,6 @@
                 </div>
             </div>
 
-            <!-- بحث عام -->
             <div class="px-4 mb-4">
                 <div class="relative">
                     <i class="fa-solid fa-search absolute right-3 top-2.5 text-xs text-gray-500"></i>
@@ -64,7 +63,6 @@
                     <span>التحليلات والكرة الأرضية</span>
                 </button>
 
-                <!-- قسم الإشراف (Moderation) -->
                 <div class="pt-3 pb-1">
                     <div class="flex items-center justify-between px-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-shield-cat text-blue-500"></i> الإشراف والحماية</span>
@@ -105,7 +103,6 @@
                     </div>
                 </div>
 
-                <!-- إعدادات الحماية المتقدمة من الموقع -->
                 <div class="pt-3 pb-1">
                     <button onclick="switchTab('settings')" id="nav-settings" class="nav-link w-full flex items-center space-x-3 space-x-reverse px-3 py-2.5 rounded-lg text-xs text-gray-400 hover:bg-gray-800/50 hover:text-white transition">
                         <i class="fa-solid fa-sliders w-4 text-center"></i>
@@ -116,7 +113,7 @@
         </div>
 
         <div class="p-3 border-t border-gray-900 text-[10px] text-gray-500 flex justify-between items-center px-4">
-            <span>Server: Online</span>
+            <span>السيرفر: متصل</span>
             <span>v2.11.22</span>
         </div>
     </aside>
@@ -126,14 +123,14 @@
         <header class="card-bg px-8 py-3 flex justify-between items-center border-b border-gray-800 sticky top-0 z-10">
             <div class="flex items-center space-x-4 space-x-reverse">
                 <span class="text-white font-bold text-sm">سيرفر أولد فايت - اللوحة الرئيسية</span>
-                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2.5 py-0.5 rounded-full font-medium">متصل وآمن</span>
+                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2.5 py-0.5 rounded-full font-medium">حماية نشطة</span>
             </div>
             <button onclick="logout()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg transition">إغلاق الجلسة</button>
         </header>
 
         <div class="p-6 space-y-6">
 
-            <!-- 1. لوحة التحكم (Dashboard) -->
+            <!-- 1. الرئيسية -->
             <div id="tab-dashboard" class="space-y-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="card-bg p-4 rounded-xl flex flex-col justify-between">
@@ -176,95 +173,86 @@
                     </div>
                 </div>
 
-                <!-- أزرار الإدارة السريعة -->
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">التحذيرات</span><span class="text-sm font-bold text-amber-400">0</span></div><div class="h-20"><canvas id="warnsChart"></canvas></div></div>
                     <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">حالات الطرد (Kicks)</span><span class="text-sm font-bold text-blue-400">0</span></div><div class="h-20"><canvas id="kicksChart"></canvas></div></div>
-                    <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">الباندات النشطة</span><span class="text-sm font-bold text-red-500" id="banCountLabel">0</span></div><div class="h-20"><canvas id="bansChart"></canvas></div></div>
+                    <div class="card-bg p-4 rounded-xl"><div class="flex justify-between items-center mb-2"><span class="text-xs text-gray-400">الباندات النشطة</span><span class="text-sm font-bold text-red-500">0</span></div><div class="h-20"><canvas id="bansChart"></canvas></div></div>
                     <div class="space-y-2 flex flex-col justify-between">
                         <button onclick="triggerAction('تنظيف المركبات')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-car text-blue-400"></i> تنظيف المركبات</button>
-                        <button onclick="triggerAction('تنظيف الـ Peds')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-user text-blue-400"></i> تنظيف الشخصيات</button>
+                        <button onclick="triggerAction('تنظيف الشخصيات')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-user text-blue-400"></i> تنظيف الشخصيات</button>
                         <button onclick="triggerAction('تنظيف المجسمات')" class="card-bg hover:bg-gray-800 text-gray-300 text-xs py-2 px-3 rounded-xl border border-gray-800 flex items-center gap-2"><i class="fa-solid fa-cube text-blue-400"></i> تنظيف المجسمات</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. قسم التحليلات والكرة الأرضية (Analytics & Globe) -->
+            <!-- 2. التحليلات والكرة الأرضية -->
             <div id="tab-analytics" class="card-bg p-6 rounded-xl hidden space-y-4">
                 <h3 class="text-white font-bold text-sm mb-2"><i class="fa-solid fa-globe text-blue-500 ml-2"></i> خريطة توزع اللاعبين حول العالم</h3>
                 <div class="h-[450px] w-full bg-black/40 rounded-xl border border-gray-800 flex flex-col items-center justify-center relative overflow-hidden">
-                    <!-- محاكاة الكرة الأرضية التفاعلية -->
                     <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?q=80&w=1200&auto=format&fit=crop');"></div>
                     <div class="z-10 text-center p-6 bg-black/60 backdrop-blur rounded-2xl border border-gray-700">
                         <i class="fa-solid fa-earth-americas text-5xl text-blue-500 mb-3 animate-pulse"></i>
                         <h4 class="text-white font-bold text-base">متصلون من دول متعددة</h4>
                         <p class="text-xs text-gray-400 mt-1">يتم تتبع الدول وتوزيع الاتصالات عبر Supabase لحظياً.</p>
-                        <div class="mt-4 flex gap-4 justify-center text-xs">
-                            <span class="bg-blue-500/10 border border-blue-500/20 text-blue-400 px-3 py-1 rounded-lg">السعودية / دول الخليج</span>
-                            <span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1 rounded-lg">أوروبا وعالمي</span>
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. قسم خريطة قراند 3D (Ingame Map) -->
+            <!-- 3. خريطة قراند 3D -->
             <div id="tab-map" class="card-bg p-6 rounded-xl hidden space-y-4">
                 <div class="flex justify-between items-center">
                     <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-map-location-dot text-emerald-500 ml-2"></i> خريطة لوس سانتوس (GTA V Ingame 3D Map)</h3>
                     <span class="text-xs text-gray-400">تتبع مواقع اللاعبين مباشرة على الخريطة</span>
                 </div>
                 <div class="h-[500px] w-full bg-gray-950 rounded-xl border border-gray-800 relative overflow-hidden flex items-center justify-center">
-                    <!-- خلفية تجميلية تمثل خريطة قراند ثلاثية الأبعاد -->
                     <div class="absolute inset-0 bg-cover bg-center opacity-70" style="background-image: url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1200&auto=format&fit=crop');"></div>
                     <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur p-4 rounded-xl border border-gray-700 text-xs space-y-2 z-10">
                         <div class="text-white font-bold mb-1">دليل الخريطة:</div>
-                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> لاعب متصل (طبيعي)</div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> لاعب متصل</div>
                         <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> لاعب خامل (AFK)</div>
-                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span> نشاط مشبوه</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. قسم بحث الحسابات (Lookup - Discord & Steam) -->
+            <!-- 4. بحث الحسابات (Discord & Steam Lookup) -->
             <div id="tab-lookup" class="card-bg p-6 rounded-xl hidden space-y-4">
                 <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-magnifying-glass text-blue-400 ml-2"></i> فحص حسابات اللاعب (Discord & Steam Lookup)</h3>
                 <div class="flex gap-3">
-                    <input type="text" id="lookupInput" placeholder="أدخل آيدي اللاعب أو رخصة الـ FiveM أو اسم ديسكورد..." class="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
+                    <input type="text" id="lookupInput" placeholder="أدخل آيدي اللاعب أو اسم ديسكورد للبحث..." class="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
                     <button onclick="performLookup()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-6 py-2.5 rounded-xl transition">بحث شامل</button>
                 </div>
                 <div id="lookupResult" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                     <div class="card-bg p-4 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-400 block mb-1">حساب ديسكورد (Discord)</span>
-                        <p class="text-white text-xs font-semibold">قم بإدخال اسم أو آيدي للبحث...</p>
+                        <p class="text-white text-xs font-semibold">جاهز للبحث...</p>
                     </div>
                     <div class="card-bg p-4 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-400 block mb-1">حساب ستيم (Steam)</span>
                         <p class="text-white text-xs font-semibold">غير محدد</p>
                     </div>
                     <div class="card-bg p-4 rounded-xl border border-gray-800">
-                        <span class="text-xs text-gray-400 block mb-1">سجل الباندات والتحذيرات</span>
-                        <p class="text-emerald-400 text-xs font-semibold">لا توجد مخالفات مسجلة</p>
+                        <span class="text-xs text-gray-400 block mb-1">سجل الباندات</span>
+                        <p class="text-emerald-400 text-xs font-semibold">لا توجد مخالفات</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. قسم تسجيل الجلسات (Session Replay) -->
+            <!-- 5. تسجيل الجلسات (Session Replay) -->
             <div id="tab-replay" class="card-bg p-6 rounded-xl hidden space-y-4">
-                <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-video text-purple-400 ml-2"></i> سجل الجلسات بالكامل (Session Replay)</h3>
-                <p class="text-xs text-gray-400">إعادة تشغيل كامل جلسة اللاعب منذ لحظة دخوله للسيرفر وحتى خروجه لمراجعة الأحداث بدقة.</p>
+                <h3 class="text-white font-bold text-sm"><i class="fa-solid fa-video text-purple-400 ml-2"></i> سجل الجلسات الكامل (Session Replay)</h3>
+                <p class="text-xs text-gray-400">إعادة تشغيل كامل جلسة اللاعب منذ لحظة دخوله للسيرفر وحتى خروجه.</p>
                 <div class="card-bg p-12 rounded-xl text-center border border-gray-800">
                     <i class="fa-solid fa-film text-4xl text-purple-500 mb-3"></i>
                     <h4 class="text-white font-bold text-sm">اختر لاعباً لعرض إعادة الجلسة</h4>
-                    <p class="text-xs text-gray-500 mt-1">يتم حفظ حركة اللاعبين ولقطاتهم في قاعدة البيانات السحابية.</p>
                 </div>
             </div>
 
-            <!-- 6. قسم مراقبة الشاشات (Monitoring) -->
+            <!-- 6. مراقبة الشاشات -->
             <div id="tab-monitor" class="card-bg p-6 rounded-xl hidden space-y-4">
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <div class="lg:col-span-3 card-bg p-8 rounded-xl flex flex-col items-center justify-center min-h-[400px]">
                         <i class="fa-solid fa-desktop text-5xl text-gray-700 mb-3"></i>
-                        <h4 class="text-white font-bold text-sm">اختر لاعباً من القائمة الجانبية لمشاهدة شاشته الحية</h4>
+                        <h4 class="text-white font-bold text-sm">اختر لاعباً من القائمة الجانبية لمشاهدة شاشته</h4>
                     </div>
                     <div class="card-bg p-4 rounded-xl space-y-2 max-h-[450px] overflow-y-auto" id="monitorPlayersList">
                         <span class="text-xs text-gray-500">جاري تحميل اللاعبين...</span>
@@ -272,11 +260,11 @@
                 </div>
             </div>
 
-            <!-- 7. إعدادات الحماية من الموقع (Config عبر Supabase) -->
+            <!-- 7. إعدادات الحماية المباشرة (Config عبر Supabase) -->
             <div id="tab-settings" class="card-bg p-6 rounded-xl hidden space-y-6">
                 <div>
-                    <h3 class="text-white font-bold text-base mb-1">إعدادات الحماية والـ Config المباشر</h3>
-                    <p class="text-xs text-gray-400">تعديل أنظمة الحماية والباندات وتفعيلها في السيرفر فورا بدون تعديل ملفات الكود.</p>
+                    <h3 class="text-white font-bold text-base mb-1">إعدادات الحماية والتحكم المباشر (Config)</h3>
+                    <p class="text-xs text-gray-400">تعديل أنظمة الحماية وتطبيقها فوراً في السيرفر بدون تعديل ملفات الكود.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="card-bg p-4 rounded-xl border border-gray-800 space-y-3">
@@ -294,11 +282,10 @@
                 <button onclick="saveConfigToSupabase()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-6 py-2.5 rounded-xl transition">حفظ وتطبيق الإعدادات في السيرفر</button>
             </div>
 
-            <!-- الأقسام الأخرى (Players, Warns, Kicks, Bans) -->
-            <div id="tab-players" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة اللاعبين المتصلين بالكامل</h3></div>
+            <div id="tab-players" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة اللاعبين المتصلين</h3></div>
             <div id="tab-warns" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">سجل التحذيرات</h3></div>
-            <div id="tab-kicks" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">سجل الطرد ومرتكبي الـ AFK</h3></div>
-            <div id="tab-bans" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة اللاعبين المحظورين (Bans)</h3></div>
+            <div id="tab-kicks" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">سجل الطرد والـ AFK</h3></div>
+            <div id="tab-bans" class="card-bg p-6 rounded-xl hidden"><h3 class="text-white font-bold text-sm">قائمة الحظر (Bans)</h3></div>
 
         </div>
     </main>
@@ -333,7 +320,7 @@
                     }
                 }
             } catch (err) {
-                console.error("خطأ في جلب البيانات:", err);
+                console.error("خطأ في البيانات:", err);
             }
         }
 
@@ -424,7 +411,6 @@
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
-            // المخططات المصغرة
             ['warnsChart', 'kicksChart', 'bansChart'].forEach(id => {
                 const ctx = document.getElementById(id).getContext('2d');
                 new Chart(ctx, {
